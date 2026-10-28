@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090d16">
+  <title>Movie Bandit GenAI Lab</title>
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Movie Bandit GenAI Lab home">
+      <span class="brand-mark"><i></i><i></i><i></i></span>
+        <span>Movie Bandit <b>GenAI Lab</b></span>
+      </a>
+      <div class="system-status"><span class="status-dot"></span><span id="statusText">Loading project index…</span></div>
+    </header>
+
+    <section class="hero">
+      <div class="eyebrow">A recommendation research desk</div>
+      <h1>Every choice has<br>a story.</h1>
+      <p>Explore the recommendation simulator with a source-grounded GenAI tutor. Ask about the math, inspect a policy decision, and see the evidence behind each explanation.</p>
+      <div class="hero-tags">
+        <span>42 candidate movies</span><span>4 bandit policies</span><span>Reproducible seed · 17</span>
+      </div>
+    </section>
+
+    <section class="workspace" aria-label="GenAI tutor workspace">
+      <aside class="control-panel panel">
+        <div class="section-kicker">Simulation settings</div>
+        <label for="profileSelect">Viewer profile</label>
+        <select id="profileSelect"></select>
+        <div id="profileSummary" class="profile-summary" aria-live="polite"></div>
+
+        <label for="policySelect">Focus policy</label>
+        <select id="policySelect">
+          <option>LinUCB</option><option>Epsilon-Greedy</option><option>Popularity</option><option>Random</option>
+        </select>
+
+        <div class="range-head"><label for="roundsSlider">Experiment horizon</label><span id="roundsValue">120 rounds</span></div>
+        <input id="roundsSlider" type="range" min="10" max="500" step="10" value="120">
+        <p class="help-copy">These settings let the assistant call read-only tools on the same fixed-seed simulation. They do not change the existing app.</p>
+
+        <div class="section-kicker quick-title">Questions to try</div>
+        <button class="prompt-chip" data-prompt="Explain regret gap in simple terms. Does more likes mean more accurate recommendations?">Explain regret gap simply</button>
+        <button class="prompt-chip" data-prompt="Why did the selected policy choose its movie in the final round? Use the simulation tool and explain the result.">Inspect the final decision</button>
+        <button class="prompt-chip" data-prompt="Compare the four policies for this viewer and horizon. Explain the tradeoff, not just the winner.">Compare all four policies</button>
+        <button class="prompt-chip" data-prompt="Explain how RAG, TF-IDF vectors, and the course policy appear in this extension.">Explain the GenAI topics</button>
+      </aside>
+
+      <section class="assistant-panel panel">
+        <div class="assistant-head">
+          <div><div class="section-kicker">Grounded in the project sources</div><h2>Ask the project tutor</h2></div>
+          <span class="mode-badge" id="modeBadge">RAG INDEX</span>
+        </div>
+        <div class="notice" id="providerNotice">Checking local model configuration…</div>
+        <div class="conversation" id="conversation" aria-live="polite">
+          <article class="message assistant-message">
+            <div class="message-label">Project tutor</div>
+            <p>Ask me about the simulator, its policies, or the GenAI extension. I’ll retrieve relevant project notes and show the sources. For exact live values, I’ll use a bounded read-only simulator tool.</p>
+          </article>
+        </div>
+        <form id="askForm" class="composer">
+          <label class="visually-hidden" for="questionInput">Ask the project assistant</label>
+          <textarea id="questionInput" rows="3" maxlength="1500" placeholder="Ask about a policy, the oracle, regret, RAG, or this run…" required></textarea>
+          <div class="composer-foot"><span>Answers are explanations, not real-world user preference predictions.</span><button id="sendButton" type="submit">Ask the lab <span aria-hidden="true">↗</span></button></div>
+        </form>
+      </section>
+    </section>
+
+    <section class="evidence-section">
+      <div class="section-kicker">Live simulator snapshot</div>
+      <div class="snapshot-head"><h2 id="snapshotTitle">Current viewer</h2><span id="snapshotNote">Seed 17 · synthetic reward environment</span></div>
+      <div class="snapshot-grid">
+        <article class="panel snapshot-card"><div class="card-kicker">Most likely in this simulator</div><div id="topMovies" class="movie-list"></div></article>
+        <article class="panel snapshot-card"><div class="card-kicker">Four policy comparison</div><div id="policyResults" class="policy-list"></div><p class="snapshot-foot">Likes are sampled rewards. Lower average regret means choices were closer to the simulator’s best probability.</p></article>
+      </div>
+    </section>
+
+    <section class="course-note">
+      <span class="course-mark">Course links · CO3 / CO5 / CO6</span>
+      <p><b>Course-aligned prototype.</b> This extension demonstrates RAG, text-vector retrieval, structured outputs, quantitative retrieval evaluation, and bounded agent tools. It does not fine-tune a model or replace the original bandit.</p>
+      <a href="/docs" target="_blank" rel="noreferrer">Open API docs ↗</a>
+    </section>
+    <footer>Movie Bandit Lab · Educational simulator · Source documents are shown with assistant answers</footer>
+  </main>
+  <script src="/static/app.js" defer></script>
+</body>
+</html>
